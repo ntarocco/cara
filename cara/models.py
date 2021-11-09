@@ -38,6 +38,7 @@ import typing
 import numpy as np
 from scipy.interpolate import interp1d
 import scipy.integrate
+import scipy.stats as sct
 
 if not typing.TYPE_CHECKING:
     from memoization import cached
@@ -965,6 +966,16 @@ class ExposureModel:
         return (self._normed_exposure() *
                 self.concentration_model.infected.emission_rate_when_present())
 
+    def probability_random_individual(self, cases, population, AB) -> _VectorisedFloat:
+        """Probability that a randomly selected individual in a focal population is infected."""
+        return cases*AB/population
+
+    def probability_meet_infected_person(self, population, cases, event, i) -> _VectorisedFloat:
+        """Probability to meet x infected person in an event with 100 people."""
+
+        AB = 2
+        return sct.binom.pmf(i, event, self.probability_random_individual(cases, population, AB), loc=0)
+
     def infection_probability(self) -> _VectorisedFloat:
         exposure = self.exposure()
 
@@ -975,7 +986,23 @@ class ExposureModel:
         )
 
         # Probability of infection.
-        return (1 - np.exp(-(inf_aero/self.concentration_model.virus.infectious_dose))) * 100
+        return (1 - np.exp(-(inf_aero/self.concentration_model.virus.infectious_dose)))
+
+    def total_probability_rule(self) -> _VectorisedFloat:
+        population = 267197 
+        cases = 68
+
+        sum_probability = 0.0
+        # Create an equivalent exposure model but with two infected cases
+        for i in range(1, 10):
+            single_exposure_model = nested_replace(
+                self, {'concentration_model.infected.number': i}
+            )
+            prob_exposed_occupant = single_exposure_model.infection_probability()
+            # By means of a Binomial Distribution
+            sum_probability += ((1 - (1 - prob_exposed_occupant)**(self.exposed.number-1))*self.probability_meet_infected_person(population, cases, self.exposed.number, i))
+
+        return sum_probability * 100
 
     def expected_new_cases(self) -> _VectorisedFloat:
         prob = self.infection_probability()
