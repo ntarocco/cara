@@ -44,8 +44,8 @@ def handler(args: argparse.ArgumentParser) -> None:
         branch = 'master'
         hostname = 'cara.web.cern.ch'
     elif args.instance == 'test-cara':
-        branch = 'live/test-cara'
         project_name = 'test-cara'
+        branch = 'live/test-cara'
         hostname = 'test-cara.web.cern.ch'
 
     generate_config(pathlib.Path(args.output_directory), project_name, hostname, branch)
