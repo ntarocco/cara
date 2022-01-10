@@ -41,6 +41,10 @@
         </div>
       {% endif %}
 
+      {% block specific_event_probability %}
+        {{ super() }}
+      {% endblock specific_event_probability %}
+
     {% if (prob_inf > 5) %}
       <br>
       {% if scale_warning.level == "green-1" %}  
