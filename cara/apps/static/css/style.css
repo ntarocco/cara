@@ -61,6 +61,23 @@ body {
   color: rgb(45, 138, 241)!important;
 }
 
+.dropdown-submenu {
+  position:relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+  top: -10px;
+  left: 100%;
+}
+
+.dropdown-submenu:hover > .dropdown-menu {
+  display: inline!important;
+} 
+
+/* rotate caret */
+.dropdown-menu > li > a:after {
+  transform: rotate(-90deg);
+} 
 
 /*============= SPLIT =============*/
 

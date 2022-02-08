@@ -41,8 +41,11 @@
                 APPS
               </a>
               <ul class="dropdown-menu dropwown-navbar-colors" style="min-width: 14rem;" aria-labelledby="navbarDropdown">
-                <li><a href="{{ calculator_prefix }}" class="{{ "header-navbar nav-link active" if "calculator/" == active_page else "header-navbar nav-link" }}">CARA CALCULATOR</a></li>
-                <li><a href="{{ calculator_prefix }}/user-guide" style="margin-left: 4rem" class="{{ "header-navbar nav-link active" if "user-guide" in active_page else "header-navbar nav-link" }}">USER GUIDE</a></li>
+                <li class="dropdown-submenu"><a href="{{ calculator_prefix }}" class="dropdown-toggle {{ "header-navbar nav-link active" if "calculator/" == active_page else "header-navbar nav-link" }}">CARA CALCULATOR</a>
+                  <ul class="dropdown-menu dropwown-navbar-colors d-none">
+                    <li><a href="{{ calculator_prefix }}/user-guide" class="{{ "header-navbar nav-link active" if "user-guide" in active_page else "header-navbar nav-link" }}">USER GUIDE</a></li>  
+                  </ul>
+                </li>
                 <li><a href="/expert-app" class="{{ "header-navbar nav-link active" if "/expert-app" == active_page else "header-navbar nav-link" }}">EXPERT APP (BETA)</a></li>
               </ul>
             </li>
